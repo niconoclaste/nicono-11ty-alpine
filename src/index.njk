@@ -1,0 +1,36 @@
+---
+layout: layout.njk
+title: The Best Eleventy Demo TM
+---
+
+
+<h1>Yo Eleventy and Alpine !</h1>
+<p>This site rocks.</p>
+
+<ul>
+{% for post in collections.blog %}
+<li>
+  <a href="{{ post.url }}">
+  <template x-if="$store.language.selected === 'ja'">
+    <strong>{{ post.data.titleJa }}</strong>
+  </template>
+  <template x-if="$store.language.selected === 'en'">
+    <strong>{{ post.data.title }}</strong>
+  </template>
+  </a>({{ post.date }})
+</li>
+{% endfor %}
+
+</ul>
+  {# <span x-data="{message:'🤖 Hello World 🤓'}" x-text="message"></span> #}
+
+  <strong x-text="$store.language.selected"></strong>
+
+  <template x-if="$store.language.selected === 'en'">
+    <p>english</p>
+  </template>
+  <template x-if="$store.language.selected === 'ja'">
+    <p>日本語</p>
+  </template>
+
+

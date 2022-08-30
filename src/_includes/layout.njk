@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Grab title from the page data and dump it here -->
+  <title>{{ title }}</title>
+  {% if description %}
+    <meta name="description" content="{{description}}"/>
+  {% endif %}
+  <link rel="stylesheet" href="/assets/styles.css">
+  {% block head %}{% endblock %}
+  <script defer src="/js/alpine.js"></script>
+</head>
+<body>
+  <main x-data="{$store}">
+  <nav><a href="/">TOP</a></nav>
+  <button @click="$store.language.set('en')">english</button>
+  <button @click="$store.language.set('ja')">japanese</button>
+  </div>
+  {% block content %}
+    {{ content | safe }}
+  {% endblock %}
+  </main>
+</body>
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.store('language', {
+           init() {
+              let lang = window.localStorage.getItem('lang');
+              if(lang === null){
+                lang = window.navigator.userLanguage || window.navigator.language;
+                if(lang !== 'ja'){
+                  lang = 'en';
+                }
+              }
+              if(lang === 'ja'){
+                this.selected = 'ja';
+              }else{
+                this.selected = 'en';
+              }
+              window.localStorage.setItem('lang', lang);
+              document.documentElement.setAttribute('lang', lang);
+            },
+            selected: 'en',
+ 
+            set(lang) {
+              if(lang === 'ja'){
+                this.selected = 'ja';
+              }else{
+                this.selected = 'en';
+              }
+              window.localStorage.setItem('lang', lang);
+              document.documentElement.setAttribute('lang', lang);
+            }
+        })
+    })
+</script>
+</html>
