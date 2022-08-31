@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Grab title from the page data and dump it here -->
+	<title>NicoNoClaste WEB DEVELOPER ウェブデベロッパー</title>
+	
+	<link rel="icon" href="/assets/favicon.png">
+	<link rel="apple-touch-icon" href="/assets/favicon.png">
+	<link rel="stylesheet" href="/assets/styles.css">
+	
+</head>
+<body x-data="{$store, lang: $store.language}">
+	<nav style="position:fixed;left:0;top:0;z-index:99999;background:black">
+	<button @click="$store.language.set('en')" style="color:white;margin-right:6px;">english</button>
+  <button @click="$store.language.set('ja')" style="color:white">japanese</button>
+	</nav>
+	
+		
+
+	<section class="l-hero">
+		
+		<h1 class="title"><span>NicoNoClaste</span><span>ウェブデベロッパー<br>WEB DEVELOPER</span></h1>
+	</section>
+
+	<main class="g-main" 
+		x-data="translationData()"
+		x-init="getTranslation()"
+	>
+		<article class="l-article" id="about">
+			<header class="m-header">
+				<h2 class="title" x-text="translation.about.title[lang.current]"></h2>
+			</header>
+
+		<template x-if="lang.current === 'en'">
+			<section class="l-section">
+				<p><strong>Nicolas</strong> (NicoNoClaste)</p>
+				<p>born in <strong>Paris</strong> living in <strong>Tokyo</strong></p>
+				<p>10+ years <strong>Web Developer</strong></p>
+				<p>
+					HTML&nbsp;<strong>CSS</strong>&nbsp;SCSS <strong>JavaScript</strong>&nbsp;TypeScript<br>
+					<strong>Svelte</strong>&nbsp;Sveltekit <strong>Vue</strong>&nbsp;Nuxt <strong>Astro</strong>&nbsp;Eleventy<br>
+					<strong>PHP</strong> SQL&nbsp;<strong>WordPress</strong> ...
+				</p>
+			</section>
+		</template>
+
+		<template x-if="lang.current === 'ja'">
+			<section class="l-section">
+				<p><strong>二コラ</strong> (ニコのクラスト)</p>
+				<p><strong>パリ</strong>生まれ <strong>東京</strong>在住</p>
+				<p>10年+ <strong>ウェブデベロッパー</strong></p>
+				<p>
+					HTML&nbsp;<strong>CSS</strong>&nbsp;SCSS <strong>JavaScript</strong>&nbsp;TypeScript<br>
+					<strong>Svelte</strong>&nbsp;Sveltekit <strong>Vue</strong>&nbsp;Nuxt <strong>Astro</strong>&nbsp;Eleventy<br>
+					<strong>PHP</strong> SQL&nbsp;<strong>WordPress</strong> ...
+				</p>
+			</section>
+		</template>
+			<footer class="m-footer">
+				<p><a href="/about"><strong x-text="translation.about.more[lang.current]"></strong></a></p>
+			</footer>
+
+		</article>
+
+		
+	</main>
+
+	
+
+
+
+
+
+
+	
+	
+<script defer src="/assets/js/alpine.js"></script>
+<script>
+	function translationData() {
+		return {
+			translation: {},
+			init () {
+				this.getTranslation()
+			},
+    	getTranslation () {
+      	fetch('/assets/translation.json')
+        .then(response => response.json())
+        .then(data => this.translation = data)
+    	},
+		}
+	};
+	
+	document.addEventListener('alpine:init', () => {
+		Alpine.store('language', {
+			init() {
+				let lang = window.localStorage.getItem('lang');
+				if(lang === null){
+					lang = window.navigator.userLanguage || window.navigator.language;
+					if(lang !== 'ja'){
+						lang = 'en';
+					}
+				}
+				if(lang === 'ja'){
+					this.current = 'ja';
+				}else{
+					this.current = 'en';
+				}
+				window.localStorage.setItem('lang', lang);
+				document.documentElement.setAttribute('lang', lang);
+			},
+			current: 'en',
+			get() {
+				return this.current;
+			},
+			set(lang) {
+				if(lang === 'ja'){
+					this.current = 'ja';
+				}else{
+					this.current = 'en';
+				}
+				window.localStorage.setItem('lang', lang);
+				document.documentElement.setAttribute('lang', lang);
+			}
+		})
+	})
+</script>
+</body>
+</html>

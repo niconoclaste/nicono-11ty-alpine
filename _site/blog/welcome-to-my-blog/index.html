@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Grab title from the page data and dump it here -->
+	<title>Welcome to my blog</title>
+	
+	<link rel="icon" href="/assets/favicon.png">
+	<link rel="apple-touch-icon" href="/assets/favicon.png">
+	<link rel="stylesheet" href="/assets/styles.css">
+	
+</head>
+<body x-data="{$store, lang: $store.language}">
+	<nav style="position:fixed;left:0;top:0;z-index:99999;background:black">
+	<button @click="$store.language.set('en')" style="color:white;margin-right:6px;">english</button>
+  <button @click="$store.language.set('ja')" style="color:white">japanese</button>
+	</nav>
+	
+		<h1>Welcome to my blog !</h1>
+<p><strong x-text="$store.language.selected"></strong></p>
+  <template x-if="$store.language.selected === 'en'">
+    <p>GREAT !</p>
+  </template>
+  <template x-if="$store.language.selected === 'ja'">
+    <p>素晴らしい！！！</p>
+  </template>
+
+	
+	
+<script defer src="/assets/js/alpine.js"></script>
+<script>
+	function translationData() {
+		return {
+			translation: {},
+			init () {
+				this.getTranslation()
+			},
+    	getTranslation () {
+      	fetch('/assets/translation.json')
+        .then(response => response.json())
+        .then(data => this.translation = data)
+    	},
+		}
+	};
+	
+	document.addEventListener('alpine:init', () => {
+		Alpine.store('language', {
+			init() {
+				let lang = window.localStorage.getItem('lang');
+				if(lang === null){
+					lang = window.navigator.userLanguage || window.navigator.language;
+					if(lang !== 'ja'){
+						lang = 'en';
+					}
+				}
+				if(lang === 'ja'){
+					this.current = 'ja';
+				}else{
+					this.current = 'en';
+				}
+				window.localStorage.setItem('lang', lang);
+				document.documentElement.setAttribute('lang', lang);
+			},
+			current: 'en',
+			get() {
+				return this.current;
+			},
+			set(lang) {
+				if(lang === 'ja'){
+					this.current = 'ja';
+				}else{
+					this.current = 'en';
+				}
+				window.localStorage.setItem('lang', lang);
+				document.documentElement.setAttribute('lang', lang);
+			}
+		})
+	})
+</script>
+</body>
+</html>

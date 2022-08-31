@@ -3,7 +3,7 @@ module.exports = function(eleventyConfig) {
   eleventyConfig.addPassthroughCopy({
     './node_modules/alpinejs/dist/cdn.js': './assets/js/alpine.js',
   });
-  eleventyConfig.addPassthroughCopy('src/assets/styles.css');
+  eleventyConfig.addPassthroughCopy('src/assets/');
   eleventyConfig.setBrowserSyncConfig({
     open: true,
   });

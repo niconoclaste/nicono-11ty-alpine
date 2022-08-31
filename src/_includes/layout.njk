@@ -1,60 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Grab title from the page data and dump it here -->
-  <title>{{ title }}</title>
-  {% if description %}
-    <meta name="description" content="{{description}}"/>
-  {% endif %}
-  <link rel="stylesheet" href="/assets/styles.css">
-  {% block head %}{% endblock %}
-  <script defer src="/js/alpine.js"></script>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Grab title from the page data and dump it here -->
+	<title>{{ title }}</title>
+	{% if description %}
+		<meta name="description" content="{{description}}"/>
+	{% endif %}
+	<link rel="icon" href="/assets/favicon.png">
+	<link rel="apple-touch-icon" href="/assets/favicon.png">
+	<link rel="stylesheet" href="/assets/styles.css">
+	{% block head %}{% endblock %}
 </head>
-<body>
-  <main x-data="{$store}">
-  <nav><a href="/">TOP</a></nav>
-  <button @click="$store.language.set('en')">english</button>
-  <button @click="$store.language.set('ja')">japanese</button>
-  </div>
-  {% block content %}
-    {{ content | safe }}
-  {% endblock %}
-  </main>
-</body>
+<body x-data="{$store, lang: $store.language}">
+	<nav style="position:fixed;left:0;top:0;z-index:99999;background:black">
+	<button @click="$store.language.set('en')" style="color:white;margin-right:6px;">english</button>
+  <button @click="$store.language.set('ja')" style="color:white">japanese</button>
+	</nav>
+	{% block content %}
+		{{ content | safe }}
+	{% endblock %}
+	
+<script defer src="/assets/js/alpine.js"></script>
 <script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.store('language', {
-           init() {
-              let lang = window.localStorage.getItem('lang');
-              if(lang === null){
-                lang = window.navigator.userLanguage || window.navigator.language;
-                if(lang !== 'ja'){
-                  lang = 'en';
-                }
-              }
-              if(lang === 'ja'){
-                this.selected = 'ja';
-              }else{
-                this.selected = 'en';
-              }
-              window.localStorage.setItem('lang', lang);
-              document.documentElement.setAttribute('lang', lang);
-            },
-            selected: 'en',
- 
-            set(lang) {
-              if(lang === 'ja'){
-                this.selected = 'ja';
-              }else{
-                this.selected = 'en';
-              }
-              window.localStorage.setItem('lang', lang);
-              document.documentElement.setAttribute('lang', lang);
-            }
-        })
-    })
+	function translationData() {
+		return {
+			translation: {},
+			init () {
+				this.getTranslation()
+			},
+    	getTranslation () {
+      	fetch('/assets/translation.json')
+        .then(response => response.json())
+        .then(data => this.translation = data)
+    	},
+		}
+	};
+	
+	document.addEventListener('alpine:init', () => {
+		Alpine.store('language', {
+			init() {
+				let lang = window.localStorage.getItem('lang');
+				if(lang === null){
+					lang = window.navigator.userLanguage || window.navigator.language;
+					if(lang !== 'ja'){
+						lang = 'en';
+					}
+				}
+				if(lang === 'ja'){
+					this.current = 'ja';
+				}else{
+					this.current = 'en';
+				}
+				window.localStorage.setItem('lang', lang);
+				document.documentElement.setAttribute('lang', lang);
+			},
+			current: 'en',
+			get() {
+				return this.current;
+			},
+			set(lang) {
+				if(lang === 'ja'){
+					this.current = 'ja';
+				}else{
+					this.current = 'en';
+				}
+				window.localStorage.setItem('lang', lang);
+				document.documentElement.setAttribute('lang', lang);
+			}
+		})
+	})
 </script>
+</body>
 </html>
