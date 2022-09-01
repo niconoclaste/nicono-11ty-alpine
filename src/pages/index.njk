@@ -1,0 +1,186 @@
+---
+layout: layout.njk
+
+pagination:
+  data: works
+  size: 10
+  alias: topWorks
+---
+
+{% set current = 'home' %}
+{% set layout = 'home' %}
+
+
+
+
+  {# let topWorks = allWorks.filter((work) => work.top).sort((a, b) => new Date(a.date).getTime() > new Date(b.date).getTime() ? -1 : new Date(a.date).getTime() < new Date(b.date).getTime() ? 1 : 0).slice(0, settings.maxWorks); #}
+
+	<section class="l-hero">
+		{% include 'Hero.njk' %}
+	</section>
+
+	<main class="g-main" x-data="translationData()" x-init="getTranslation()">
+
+		{% include 'Header.njk' %}
+
+		<article class="l-article" id="about">
+			<header class="m-header">
+				<h2 class="title" x-text="translation.about.title[lang.current]"></h2>
+			</header>
+
+
+			<template x-if="lang.current === 'en'">
+			<section class="l-section">
+				<p><strong>Nicolas</strong> (NicoNoClaste)</p>
+				<p>born in <strong>Paris</strong> living in <strong>Tokyo</strong></p>
+				<p>10+ years <strong>Web Developer</strong></p>
+				<p>
+					HTML&nbsp;<strong>CSS</strong>&nbsp;SCSS <strong>JavaScript</strong>&nbsp;TypeScript<br>
+					<strong>Svelte</strong>&nbsp;Sveltekit <strong>Vue</strong>&nbsp;Nuxt <strong>Astro</strong>&nbsp;Eleventy<br>
+					<strong>PHP</strong> SQL&nbsp;<strong>WordPress</strong> ...
+				</p>
+			</section>
+			</template>
+
+			<template x-if="lang.current === 'ja'">
+			<section class="l-section">
+				<p><strong>二コラ</strong> (ニコのクラスト)</p>
+				<p><strong>パリ</strong>生まれ <strong>東京</strong>在住</p>
+				<p>10年+ <strong>ウェブデベロッパー</strong></p>
+				<p>
+					HTML&nbsp;<strong>CSS</strong>&nbsp;SCSS <strong>JavaScript</strong>&nbsp;TypeScript<br>
+					<strong>Svelte</strong>&nbsp;Sveltekit <strong>Vue</strong>&nbsp;Nuxt <strong>Astro</strong>&nbsp;Eleventy<br>
+					<strong>PHP</strong> SQL&nbsp;<strong>WordPress</strong> ...
+				</p>
+			</section>
+			</template>
+
+{% if topWorks.length %}
+
+<p>YES YES YES !</p>
+
+{% else %}
+
+<p>NOOOOOOOooooo !</p>
+
+{% endif %}
+
+			<footer class="m-footer">
+				<p><a href="/about"><strong x-text="translation.about.more[lang.current]"></strong></a></p>
+			</footer>
+
+		</article>
+
+		{# <article class="l-article" id="works" v-if="settings.maxWorks >= works.length">
+			<header class="m-header">
+				<h2 class="title">{{translation.works.title[language]}}</h2>
+			</header>
+
+			<section class="l-section">
+				<div class="m-bloc" id="top-works">
+					<ul class="m-works-list">
+						<li v-for="work in works" :key="work.id">
+							<a :href="work.link" target="_blank" rel="noopener">
+								<div class="m-works-list_thumb" v-if="work.thumb">
+									<img :src="work.thumb" :alt="work.title[language]" class="img" loading="lazy">
+								</div>
+
+								<div class="m-works-list_body">
+									<h2 class="title">{{work.title[language]}}</h2>
+									<p class="m-works-list_desc">
+										<small>{{work.client[language] !== work.title[language] ? work.client[language]+' ' : ''}}({{dateOutput(work.date)}})</small>
+									</p>
+									<!-- <p class="m-works-list_desc"><small>{{dateOutput(work.date)}}</small></p> -->
+								</div>
+								<div class="m-works-list_tags" v-if="work.techs">
+									<span v-for="tech in work.techs" class="m-logo-icon" :style="'background-image:var(--logo_'+tech+')'" title="{tech}">{{tech}}</span>
+								</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</section>
+
+			<footer class="m-footer" v-if="settings.maxWorks >= works.length">
+				<p><a href="/works"> <strong>{{translation.works.more[language]}}</strong></a></p>
+			</footer>
+
+		</article>
+
+
+		<article class="l-article" id="codes">
+			<header class="m-header">
+				<h2 class="title">{{translation.codes.title[language]}}</h2>
+			</header>
+
+			<section class="l-section">
+
+				<CodeSnippet id="NWgvaOa" title="CSS only responsive slider" title_ja="CSSのみ レスポンシブ カルーセル" :language="language" />
+
+
+				<CodeSnippet id="ExbKxPx" title="Responsive svg progress circle" title_ja="レスポンシブSVG進行サークル" :language="language"/>
+
+				<CodeSnippet id="poadjOL" title="STAR WARS opening" title_ja="スターウォーズ オープニング" :language="language"/>
+
+			</section>
+			<footer class="m-footer">
+				<p><a href="https://codepen.io/niconoclaste" target="_blank" rel="noopener"><strong>{{translation.codes.more[language]}}</strong></a></p>
+			</footer>
+		</article>
+
+
+		<article class="l-article" id="articles">
+			<header class="m-header">
+				<h2 class="title">{{translation.articles.title[language]}}</h2>
+			</header>
+
+			<section class="l-section">
+				<div class="m-bloc">
+					<PostsList :language="language" />
+				</div>
+			</section>
+
+			<footer class="m-footer">
+				<p><a href="/articles"><strong>{{translation.articles.more[language]}}</strong></a></p>
+			</footer>
+		</article> #}
+	</main>
+
+	{# <Footer /> #}
+
+{# 
+
+
+
+
+<h1>Yo Eleventy and Alpine !</h1>
+<p>This site rocks.</p>
+
+<ul>
+{% for post in collections.blog %}
+<li>
+  <a href="{{ post.url }}">
+  <template x-if="$store.language.selected === 'ja'">
+    <strong>{{ post.data.titleJa }}</strong>
+  </template>
+  <template x-if="$store.language.selected === 'en'">
+    <strong>{{ post.data.title }}</strong>
+  </template>
+  </a>({{ post.date }})
+</li>
+{% endfor %}
+
+</ul>
+
+  
+
+  <template x-if="$store.language.selected === 'en'">
+    <p>english</p>
+  </template>
+  <template x-if="$store.language.selected === 'ja'">
+    <p>日本語</p>
+  </template>
+ #}
+
+
+

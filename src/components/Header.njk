@@ -1,0 +1,17 @@
+<header class="g-header">
+  <nav class="g-navigation" tabindex="0" x-data="{naviIsopened:false}">
+		<button class="m-hamburger" :class="naviIsopened ? 'is-closed' : ''" @click="naviIsopened=!naviIsopened">
+			<i></i><i></i><i></i>
+		</button>
+    <div class="g-navigation_container">
+			{% include 'Nav.njk' %}
+    </div>
+  </nav>
+</header>
+
+<aside class="g-aside">
+  <h1>
+    <a href="{% if current === 'home' %}#top{% else %}/{% endif %}">NicoNoClaste</a>
+    <span>WEB DEVELOPER ・ ウェブデベロッパー</span>
+  </h1>
+</aside>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% if title %}{{ title }} | {{settings.baseTitle}}{% else %}{{settings.baseTitle}}{% endif %}</title>
+	{% if description %}
+		<meta name="description" content="{{description}}"/>
+	{% endif %}
+	<link rel="icon" href="/favicon.png">
+	<link rel="apple-touch-icon" href="/favicon.png">
+	<link rel="stylesheet" href="/assets/styles.css">
+	{% block head %}{% endblock %}
+</head>
+<body x-data="{$store, lang: $store.language}">
+	{% block content %}
+		{{ content | safe }}
+	{% endblock %}
+	
+<script defer src="/assets/js/alpine.js"></script>
+<script>
+	function translationData() {
+		return {
+			translation: false,
+			init () {
+				this.getTranslation()
+			},
+    	getTranslation () {
+      	fetch('/data/translation.json')
+        .then(response => response.json())
+        .then(data => { 
+					this.translation = data;
+				})
+    	},
+		}
+	};
+
+	function settingsData() {
+		return {
+			settings: false,
+			init () {
+				this.getSettings()
+			},
+    	getSettings () {
+      	fetch('/data/settings.json')
+        .then(response => response.json())
+        .then(data => { 
+					this.settings = data;
+				})
+    	},
+		}
+	};
+	
+	document.addEventListener('alpine:init', () => {
+		Alpine.store('language', {
+			init() {
+				let lang = window.localStorage.getItem('lang');
+				if(lang === null){
+					lang = window.navigator.userLanguage || window.navigator.language;
+					if(lang !== 'ja'){
+						lang = 'en';
+					}
+				}
+				if(lang === 'ja'){
+					this.current = 'ja';
+				}else{
+					this.current = 'en';
+				}
+				window.localStorage.setItem('lang', lang);
+				document.documentElement.setAttribute('lang', lang);
+			},
+			current: 'en',
+			get() {
+				return this.current;
+			},
+			set(lang) {
+				if(lang === 'ja'){
+					this.current = 'ja';
+				}else{
+					this.current = 'en';
+				}
+				window.localStorage.setItem('lang', lang);
+				document.documentElement.setAttribute('lang', lang);
+			}
+		})
+	})
+</script>
+</body>
+</html>
