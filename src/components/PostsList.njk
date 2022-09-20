@@ -1,0 +1,49 @@
+{% macro params(articles, top) %}
+
+	<ul class="m-posts-list">
+	{% for post in articles | reverse %}
+	{% if not post.data.hidden %}
+	{% if top and post.data.top or not top %}
+		<li x-data="{title: {'en': '{{post.data.title}}', 'ja': '{{post.data.title_ja}}'} }">
+			<a href="/articles/{{ post.data.slug }}">
+				<div class="m-posts-list_thumb">
+					<img src="{{post.data.thumb}}" :alt="title[lang.current]" class="img">
+				</div>
+
+				<div class="m-posts-list_body">
+					<p class="m-posts-list_category" x-data="{category: {'en': '{{post.data.category}}', 'ja': '{{post.data.category_ja}}'} }" x-html="category[lang.current]"></p>
+					<h2 class="title" x-text="title[lang.current]"></h2>
+					<p class="m-posts-list_date">
+						<span x-data="{date: {
+							'en': new Intl.DateTimeFormat('ja-JP', {dateStyle: 'short'}).format(new Date('{{post.data.date}}')), 
+							'ja': new Intl.DateTimeFormat('ja-JP', {dateStyle: 'long'}).format(new Date('{{post.data.date}}'))
+						}}" x-text="date[lang.current]"></span>
+						<small x-data="{lastModified: {
+							'en': '(updated : ' + new Intl.DateTimeFormat('ja-JP', {dateStyle: 'short'}).format(new Date('{{post.data.lastModified}}')) + ')', 
+							'ja': '(更新：' + new Intl.DateTimeFormat('ja-JP', {dateStyle: 'long'}).format(new Date('{{post.data.lastModified}}')) + ')'
+						}}" x-text="lastModified[lang.current]">
+						</small>
+					</p>
+					<p class="m-posts-list_desc" x-data="{excerpt: {'en': '{{post.data.excerpt}}', 'ja': '{{post.data.excerpt_ja}}'} }" x-html="excerpt[lang.current]"></p>
+					<p class="m-post-list_series" x-data="{ nth(nb) { return this.formatted = nb < 11 || nb > 13 ? nb + ['st', 'nd', 'rd', 'th'][Math.min((nb - 1) % 10, 3)] : nb + 'th'; } }" >
+						<span x-data="{ series : {
+							'en': 'This article is the ' +nth({{post.data.series_nb}})+ ' part of the [{{post.data.series}}] series.',
+							'ja': 'この記事は[{{post.data.series}}]シリーズの{{post.data.series_nb}}番目の記事です。'
+						}}" x-text="series[lang.current]"></span>
+					</p>
+					<p class="m-posts-list_readmore" x-text="translation?.articles?.readmore[lang.current]"></p>
+					{% if post.data.tags_list %}
+						<div class="m-posts-list_tags">
+							{% for tag in post.data.tags_list %}
+							<span>{{tag}}</span>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+			</a>
+		</li>
+	{% endif %}
+	{% endif %}
+	{% endfor %}
+	</ul>
+{% endmacro %}

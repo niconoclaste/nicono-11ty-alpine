@@ -1,25 +1,26 @@
     <ul>
       <li{% if current === 'home' %} class="is-active"{% endif %}>
-        <a href="{% if current === 'home' %}#top{% else %}/{% endif %}" x-text="translation.home.title[lang.current]" @click="naviIsopened=!naviIsopened"></a>
+        <a href="{% if current === 'home' %}#top{% else %}/{% endif %}" x-text="translation?.home?.title[lang.current]" @click="naviIsopened=!naviIsopened"></a>
       </li>
       <li{% if current === 'about' %} class="is-active"{% endif %}>
-        <a href="/#about" x-text="translation.about.title[lang.current]" @click="naviIsopened=!naviIsopened"></a>
+        <a href="/#about" x-text="translation?.about?.title[lang.current]" @click="naviIsopened=!naviIsopened"></a>
       </li>
 			{# {% if showWorks %} #}
       <li{% if current === 'works' %} class="is-active"{% endif %}>
-        <a href="/#works" x-text="translation.works.title[lang.current]" @click="naviIsopened=!naviIsopened"></a>
+        <a href="/#works" x-text="translation?.works?.title[lang.current]" @click="naviIsopened=!naviIsopened"></a>
       </li>
       {# {% endif %} #}
       <li{% if current === 'codes' %} class="is-active"{% endif %}>
-        <a href="/#codes" x-text="translation.codes.title[lang.current]" @click="naviIsopened=!naviIsopened"></a>
+        <a href="/#codes" x-text="translation?.codes?.title[lang.current]" @click="naviIsopened=!naviIsopened"></a>
       </li>
 			{# {% if showArticles %} #}
       <li{% if current === 'articles' %} class="is-active"{% endif %}>
-        <a href="{current === 'articles' && layout === 'single' ? '/articles' : '/#articles'}" x-text="translation.articles.title[lang.current]" @click="naviIsopened=!naviIsopened"></a>
+				<a href="/#articles" x-text="translation?.articles?.title[lang.current]" @click="naviIsopened=!naviIsopened"></a>
+        {# <a href="{current === 'articles' && layout === 'single' ? '/articles' : '/#articles'}" x-text="translation?.articles?.title[lang.current]" @click="naviIsopened=!naviIsopened"></a> #}
       </li>
       {# {% endif %} #}
       <li>
-        <span x-text="translation.contact.title[lang.current]"></span>
+        <span x-text="translation?.contact?.title[lang.current]"></span>
         <ul>
           <li><a href="mailto:{email}" style="background-image:var(--logo_email)" title="{email}" @click="naviIsopened=!naviIsopened">email</a></li>
           <li><a href="https://twitter.com/NicoloNoClaste/" target="_blank" rel="noreferrer" title="twitter.com/NicoloNoClaste" style="background-image:var(--logo_twitter)" @click="naviIsopened=!naviIsopened">twitter</a></li>
@@ -30,9 +31,11 @@
       <li>
         <template x-if="lang.current === 'en'">
         <button type="button" class="m-lang_btn" @click="$store.language.set('ja'); naviIsopened=!naviIsopened">日本語</button>
+        {# <button type="button" class="m-lang_btn" @click="$store.language.set('ja')">日本語</button> #}
 				</template>
         <template x-if="lang.current === 'ja'">
         <button type="button" class="m-lang_btn" @click="$store.language.set('en'); naviIsopened=!naviIsopened">English</button>
+        {# <button type="button" class="m-lang_btn" @click="$store.language.set('en')">English</button> #}
         </template>
       </li>
     </ul>

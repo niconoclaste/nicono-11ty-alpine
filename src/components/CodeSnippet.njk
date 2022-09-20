@@ -1,0 +1,14 @@
+{% macro params(snippet_id, snippet_title, snippet_title_ja) %}
+<div class="m-bloc" x-data="{title: {'en': '{{snippet_title}}', 'ja': '{{snippet_title_ja}}'} }">
+  <h3 class="title" x-text="title[lang.current]"></h3>
+  <div class="m-codepen">
+    <iframe scrolling="no" src="https://codepen.io/niconoclaste/embed/{{snippet_id}}?default-tab=result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true" :title="title[lang.current]">
+			<p>
+				<span x-text="lang.current === 'ja' ? 'このコードペンを見る' : 'See this Pen'"></span>
+				<a href="https://codepen.io/niconoclaste/pen/{{snippet_id}}" target="_blank" x-text="title[lang.current]"></a>
+				by ニコ (<a href="https://codepen.io/niconoclaste">@niconoclaste</a>)
+			</p>
+    </iframe>
+  </div>
+</div>
+{% endmacro %}

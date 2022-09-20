@@ -14,9 +14,43 @@
 	{% block head %}{% endblock %}
 </head>
 <body x-data="{$store, lang: $store.language}">
-	{% block content %}
-		{{ content | safe }}
-	{% endblock %}
+
+
+<main class="g-main" x-data="translationData()" x-init="getTranslation()">
+	{% set current = 'articles' %}
+	{% set layout = 'single' %}
+
+  {% include 'Header.njk' %}
+
+  <article class="l-article" id="{{current}}">
+    <header class="m-header">
+      <h1 class="title" x-data="{title: {'en':'{{title}}', 'ja': '{{title_ja}}'}}" x-text="title[lang.current]"></h1>
+    </header>
+
+    <section class="l-section">
+      <div class="m-bloc">
+
+        <h3 class="title" x-data="{exerpt: {'en':'{{excerpt}}', 'ja': '{{excerpt_ja}}'}}" x-html="exerpt[lang.current]"></h3>
+
+				<p class="m-article-date" x-data="{date: {
+					'en': new Intl.DateTimeFormat('ja-JP', {dateStyle: 'short'}).format(new Date('{{date}}')), 
+					'ja': new Intl.DateTimeFormat('ja-JP', {dateStyle: 'long'}).format(new Date('{{date}}'))
+				}}" x-text="date[lang.current]"></p>
+
+				{% block content %}
+					{{ content | safe }}
+				{% endblock %}
+      </div>
+    </section>
+
+    <footer class="m-footer">
+      {# <p><a href="/{category}"><strong>{translation[category].more[$language]}</strong></a></p> #}
+    </footer>
+  </article>
+</main>
+
+{% include 'Footer.njk' %}
+
 	
 <script defer src="/assets/js/alpine.js"></script>
 <script>
