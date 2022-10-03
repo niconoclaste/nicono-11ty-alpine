@@ -1,0 +1,136 @@
+---
+layout: layout.njk
+---
+
+{% set current = 'works' %}
+{% set layout = 'category' %}
+
+	<main class="g-main" x-data="translationData()" x-init="getTranslation()">
+
+		{% include 'Header.njk' %}
+
+		<article class="l-article" id="works">
+			<header class="m-header">
+				<h2 class="title" x-text="translation?.works?.title[lang.current]"></h2>
+			</header>
+
+
+			<section class="l-section">
+				<div class="m-bloc" 
+					x-data="{ 
+						allWorks: [],
+						works: [], 
+						order: 'DESC', 
+						showHidden: '0',
+						allCategories: [],
+						categories: [],
+						worksShown: 0,
+						maxWorks: {{settings.maxWorks}},
+						page: 1,
+						selectedPage :1,
+						pages: 0
+					}" 
+					x-init="
+						fetch('http://niconoclaste.jp/lib/works/')
+						.then(response => response.json()).then(data => {
+							allWorks = data.filter((work) => work.id !== '〇〇');
+							let filteredWorks = data.filter((work) => showHidden === '0' ? !work.hidden : work);
+							filteredWorks = filteredWorks.filter((work) => work.id !== '〇〇');
+							let sortedWorks = filteredWorks.sort((a, b) => order === 'DESC' ? new Date(b.date).getTime() - new Date(a.date) : new Date(a.date).getTime() - new Date(b.date));
+							works = sortedWorks;
+
+							let filteredCats = [...new Set(filteredWorks.map(work => work.category))];
+							filteredCats.forEach(cat => cat !== '' ? categories.push(cat) : '');
+
+							let allCats = [...new Set(allWorks.map(work => work.category))];
+							allCats.forEach(cat => cat !== '' ? allCategories.push({name:cat, selected: categories.includes(cat), available: categories.includes(cat)}) : '');
+							worksShown = sortedWorks.length;
+
+
+							pages = Math.ceil(worksShown / maxWorks);
+							console.log(pages);
+
+						});
+
+						$watch(
+							'order, showHidden, categories', 'techs', (value) => {
+								works = works.sort((a, b) => order === 'DESC' ? new Date(b.date).getTime() - new Date(a.date) : new Date(a.date).getTime() - new Date(b.date));
+								allWorks = allWorks.sort((a, b) => order === 'DESC' ? new Date(b.date).getTime() - new Date(a.date) : new Date(a.date).getTime() - new Date(b.date));
+								works = allWorks.filter((work) => showHidden === '0' ? !work.hidden : work);
+
+								let filteredCats = [...new Set(works.map(work => work.category))];
+								allCategories.forEach((cat) => filteredCats.includes(cat.name) ? cat.available = true : cat.available = false);
+
+								allCategories.forEach((cat) => categories.includes(cat.name) ? cat.selected = true : cat.selected = false);
+
+								works = works.filter((work) => categories.includes(work.category));
+
+								worksShown = works.length;
+							}
+						);
+					">
+
+					{# <p class="m-filter-bloc">
+						<strong>ORDER BY DATE : </strong><br>
+						<label><input type="radio" x-model="order" value="DESC"> new → old </label> <br>
+						<label><input type="radio" x-model="order" value="ASC"> old → new </label>
+					</p>
+
+					<p class="m-filter-bloc">
+						<strong>SHOW HIDDEN WORKS ? : </strong>
+						<label><input type="radio" x-model="showHidden" value="0"> no </label>
+						<label><input type="radio" x-model="showHidden" value="1"> yes </label> 
+					</p>
+
+					<p class="m-filter-bloc">
+						<strong>FILTER BY CATEGORIES : </strong>
+						<template x-for="cat in allCategories">
+						<label>
+							<input type="checkbox" :disabled='!cat.available' :value="cat.name" :checked="cat.selected" x-model="categories">
+							<span x-text="translation?.works?.categories[cat.name][lang.current]"></span>
+						</label>
+						</template>
+					</p>
+ #}
+
+					<ul id="list" class="m-works-list">
+						<template x-for="(work, i) in works">
+						<li :hidden="Math.floor((i / maxWorks) + 1) > selectedPage ? true : false">
+							<a :href="work.link" target="_blank" rel="noopener">
+								<template x-if="work.thumb.length">
+								<div class="m-works-list_thumb">
+									<img :src="work.thumb" :alt="work.title[lang.current]" class="img" loading="lazy">
+								</div>
+								</template>
+								<div class="m-works-list_body">
+									<h2 class="title" x-text="work.title[lang.current]"></h2>
+									<p class="m-works-list_desc">
+										<small x-text="work.client[lang.current] != work.title[lang.current] ? work.client[lang.current]+' '+work.date : work.date"></small>
+									</p>
+									<p x-text="translation?.works?.categories[work.category][lang.current]"></p>
+								</div>
+								<template x-if="work.techs.length">
+								<div class="m-works-list_tags">
+									<template x-for="tech in work.techs">
+										<span class="m-logo-icon" :style="'background-image:var(--logo_'+tech+')'" :title="tech" x-text="tech"></span>
+									</template>
+								</div>
+								</template>
+							</a>
+						</li>
+						</template>
+					</ul>
+
+					<template x-if="pages > 1 && selectedPage < pages">
+					<button x-on:click="selectedPage = selectedPage + 1">LOAD MORE</button>
+					</template>
+				</div>
+			</section>
+
+			<footer class="m-footer">
+				<p><a href="/#works"><strong x-text="lang.current === 'ja' ? 'トップページ' : 'Site top'"></strong></a></p>
+			</footer>
+		</article>
+	</main>
+
+	{% include 'Footer.njk' %}

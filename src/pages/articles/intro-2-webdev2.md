@@ -12,7 +12,7 @@ tags_list: [HTML, CSS]
 category: web
 category_ja: ウェブ
 series: "world wide web"
-series_nb: 1
+series_nb: 2
 thumb: "http://www.niconoclaste.jp/img/code.jpg"
 top: true
 #hidden

@@ -1,9 +1,9 @@
 {% macro params(articles, top) %}
-
 	<ul class="m-posts-list">
 	{% for post in articles | reverse %}
 	{% if not post.data.hidden %}
-	{% if top and post.data.top or not top %}
+	{# {% if top and post.data.top or not top %} #}
+	{% if top and post.data.top or top === false %}
 		<li x-data="{title: {'en': '{{post.data.title}}', 'ja': '{{post.data.title_ja}}'} }">
 			<a href="/articles/{{ post.data.slug }}">
 				<div class="m-posts-list_thumb">

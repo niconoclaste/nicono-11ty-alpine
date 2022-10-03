@@ -15,7 +15,7 @@
       </li>
 			{# {% if showArticles %} #}
       <li{% if current === 'articles' %} class="is-active"{% endif %}>
-				<a href="/#articles" x-text="translation?.articles?.title[lang.current]" @click="naviIsopened=!naviIsopened"></a>
+				<a{% if layout === 'single' %} href="/articles" {% else %} href="/#articles"{% endif %} x-text="translation?.articles?.title[lang.current]" @click="naviIsopened=!naviIsopened"></a>
         {# <a href="{current === 'articles' && layout === 'single' ? '/articles' : '/#articles'}" x-text="translation?.articles?.title[lang.current]" @click="naviIsopened=!naviIsopened"></a> #}
       </li>
       {# {% endif %} #}

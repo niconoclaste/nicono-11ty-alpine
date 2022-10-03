@@ -1,0 +1,57 @@
+---
+layout: layout.njk
+---
+
+{% set current = 'about' %}
+{% set layout = 'category' %}
+
+	<main class="g-main" x-data="translationData()" x-init="getTranslation()">
+
+		{% include 'Header.njk' %}
+
+		<article class="l-article" id="about">
+			<header class="m-header">
+				<h2 class="title" x-text="translation?.about?.title[lang.current]"></h2>
+			</header>
+
+			<section class="l-section">
+			<template x-if="lang.current === 'en'">
+				<div class="m-bloc">
+					<h3 class="title">About me</h3>
+					<p>aaaaa</p>
+					<p>aaaaa</p>
+				</div>
+			</template>
+
+			<template x-if="lang.current === 'ja'">
+				<div class="m-bloc">
+					<h3 class="title">私について</h3>
+					<p>あああああ</p>
+					<p>あああああ</p>
+				</div>
+			</template>
+
+			<template x-if="lang.current === 'en'">
+				<div class="m-bloc">
+					<h3 class="title">About this site</h3>
+					<p>bbbbbb</p>
+					<p>bbbbbb</p>
+				</div>
+			</template>
+
+			<template x-if="lang.current === 'ja'">
+				<div class="m-bloc">
+					<h3 class="title">このサイトについて</h3>
+					<p>いいいいいい</p>
+					<p>いいいいいい</p>
+				</div>
+			</template>
+			</section>
+
+			<footer class="m-footer">
+				<p><a href="/#about"><strong x-text="lang.current === 'ja' ? 'トップページ' : 'Site top'"></strong></a></p>
+			</footer>
+		</article>
+	</main>
+
+	{% include 'Footer.njk' %}

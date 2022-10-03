@@ -1,0 +1,33 @@
+---
+layout: layout.njk
+---
+
+{% set current = 'articles' %}
+{% set layout = 'category' %}
+
+	<main class="g-main" x-data="translationData()" x-init="getTranslation()">
+
+		{% include 'Header.njk' %}
+
+		<article class="l-article" id="articles">
+			<header class="m-header">
+				<h2 class="title" x-text="translation?.articles?.title[lang.current]"></h2>
+			</header>
+
+			<section class="l-section">
+				<div class="m-bloc">
+
+				{% import 'PostsList.njk' as PostsList %}
+
+				{{ PostsList.params(collections.articles, false) }}
+
+				</div>
+			</section>
+
+			<footer class="m-footer">
+				<p><a href="/#articles"><strong x-text="lang.current === 'ja' ? 'トップページ' : 'Site top'"></strong></a></p>
+			</footer>
+		</article>
+	</main>
+
+	{% include 'Footer.njk' %}
